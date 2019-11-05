@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DemoApp</string>
+    <string name="num_song">%d SONG</string>
+    <string name="num_songs">%d SONGS</string>
 </resources>

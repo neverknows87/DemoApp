@@ -1,5 +1,6 @@
 package com.desmond.demoapp.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +14,9 @@ import com.desmond.demoapp.model.Album
 import com.desmond.demoapp.presenter.AlbumPresenter
 import com.desmond.demoapp.view.GridSpacingItemDecoration
 
-class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, AlbumPresenter.AlbumView {
+class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
+    AlbumPresenter.AlbumView, ListAdapter.ItemClickedListener {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private var adapter: ListAdapter? = null
@@ -31,7 +34,7 @@ class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
         swipeRefresh.setOnRefreshListener(this)
 
         //Initialize views and adapter
-        adapter = ListAdapter(this, arrayList)
+        adapter = ListAdapter(this, arrayList, this)
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(GridSpacingItemDecoration(3, 20, false))
         recyclerView.layoutManager = GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false)
@@ -62,4 +65,9 @@ class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
         Log.e("Main", error)
     }
 
+    override fun onItemClicked(album: Album) {
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra("album-extra", album)
+        startActivity(intent)
+    }
 }

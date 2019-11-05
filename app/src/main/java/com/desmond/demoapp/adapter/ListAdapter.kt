@@ -11,9 +11,10 @@ import com.desmond.demoapp.R
 import com.desmond.demoapp.model.Album
 import com.squareup.picasso.Picasso
 
-class ListAdapter(ctx: Context, data: List<Album>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(ctx: Context, data: List<Album>, listener: ItemClickedListener): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     private var dataList : List<Album> = data
     private val inflater: LayoutInflater = LayoutInflater.from(ctx)
+    private val clickedListener: ItemClickedListener = listener
 
     fun updateData(data: List<Album>) {
         dataList = data
@@ -35,6 +36,9 @@ class ListAdapter(ctx: Context, data: List<Album>): RecyclerView.Adapter<ListAda
         Picasso.get().load(album.images?.get(1)?.url).into(holder.albumCover)
         holder.artistName.text = album.artists?.get(0)?.name
         holder.albumName.text = album.name
+        holder.itemView.setOnClickListener {
+            clickedListener.onItemClicked(album)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -45,5 +49,9 @@ class ListAdapter(ctx: Context, data: List<Album>): RecyclerView.Adapter<ListAda
         var albumCover: ImageView = itemView.findViewById(R.id.iv_cover) as ImageView
         var artistName: TextView = itemView.findViewById(R.id.tv_artist) as TextView
         var albumName: TextView = itemView.findViewById(R.id.tv_album) as TextView
+    }
+
+    interface ItemClickedListener {
+        fun onItemClicked(album: Album)
     }
 }

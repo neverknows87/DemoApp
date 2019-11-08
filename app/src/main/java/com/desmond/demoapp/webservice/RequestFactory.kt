@@ -1,21 +1,37 @@
 package com.desmond.demoapp.webservice
 
+import com.desmond.demoapp.ACCESSTOKEN
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+const val TIMEOUT:Long = 20
 class RequestFactory {
     companion object {
-        fun create(): ApiService {
-            val retrofit = makeRetrofit(accessTokenProvidingInterceptor())
+        fun createAuthService(): ApiService {
+            val retrofit = makeAuthRetrofit()
 
             return retrofit.create(ApiService::class.java)
         }
 
-        fun makeRetrofit(vararg interceptors: Interceptor) = Retrofit.Builder()
+        fun createApiService(): ApiService {
+            val retrofit = makeApiRetrofit(accessTokenProvidingInterceptor())
+
+            return retrofit.create(ApiService::class.java)
+        }
+
+        fun makeAuthRetrofit() = Retrofit.Builder()
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://accounts.spotify.com/")
+            .client(makeAuthHttpClient())
+            .build()
+
+        fun makeApiRetrofit(vararg interceptors: Interceptor) = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://api.spotify.com/v1/")
@@ -30,17 +46,28 @@ class RequestFactory {
         }
 
         fun accessTokenProvidingInterceptor() = Interceptor { chain ->
-            val accessToken = "BQDycqT_eQFS7p8Dwkpub9tu-CCmZtNwAaul1neE9JNDynha2G_es_107E0I32v4nfpIxwJTAyZAVkr9WDA"
             chain.proceed(chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $accessToken")
+                .addHeader("Authorization", "Bearer $ACCESSTOKEN")
                 .build())
         }
 
         private fun makeHttpClient(interceptors: Array<out Interceptor>) = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(headersInterceptor())
-            .apply { interceptors().addAll(interceptors) }
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level =  HttpLoggingInterceptor.Level.BODY
+            })
+            .apply { interceptors().addAll(interceptors)
+            }
+            .build()
+
+        private fun makeAuthHttpClient() = OkHttpClient.Builder()
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level =  HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 }

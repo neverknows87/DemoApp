@@ -37,7 +37,7 @@ class ListAdapter(ctx: Context, data: List<Album>, listener: ItemClickedListener
         holder.artistName.text = album.artists?.get(0)?.name
         holder.albumName.text = album.name
         holder.itemView.setOnClickListener {
-            clickedListener.onItemClicked(album)
+            clickedListener.onItemClicked(it, album)
         }
     }
 
@@ -52,6 +52,6 @@ class ListAdapter(ctx: Context, data: List<Album>, listener: ItemClickedListener
     }
 
     interface ItemClickedListener {
-        fun onItemClicked(album: Album)
+        fun onItemClicked(view: View, album: Album)
     }
 }

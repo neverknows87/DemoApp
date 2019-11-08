@@ -15,6 +15,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
+            android:transitionName="image_cover"
             android:contentDescription="cover_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,31 +23,32 @@
 
         <TextView
             android:id="@+id/album_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:gravity="center"
             android:textSize="36sp"
-            tools:text="Album Name"
+            android:transitionName="album_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/squaredImageView" />
+            app:layout_constraintTop_toBottomOf="@id/squaredImageView"
+            tools:text="Album Name" />
 
         <TextView
             android:id="@+id/artist_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:gravity="center"
             android:textSize="20sp"
-            tools:text="Artist Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/album_name" />
+            app:layout_constraintTop_toBottomOf="@id/album_name"
+            tools:text="Artist Name" />
 
         <TextView
             android:id="@+id/song_counts"

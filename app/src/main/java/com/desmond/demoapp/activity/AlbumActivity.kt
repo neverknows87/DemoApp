@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -24,10 +25,11 @@ import com.desmond.demoapp.view.AlbumViewModel
 import com.desmond.demoapp.view.GridSpacingItemDecoration
 
 class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
-    AlbumPresenter.AlbumView, ListAdapter.ItemClickedListener {
+    AlbumPresenter.AlbumView, ListAdapter.ItemListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var emptyLayout: TextView
     private var adapter: ListAdapter? = null
     private var presenter: AlbumPresenter? = null
     private var arrayList: List<Album> = ArrayList()
@@ -48,6 +50,7 @@ class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
             }
         })
 
+        emptyLayout = findViewById(R.id.emptyLayout)
         recyclerView = findViewById(R.id.recyclerview)
         swipeRefresh = findViewById(R.id.swipeRefreshLayout)
 
@@ -97,6 +100,14 @@ class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun onItemClicked(view: View, album: Album) {
         detailsPreview(view, album)
+    }
+
+    override fun onEmptyList(empty: Boolean) {
+        if (empty) {
+            emptyLayout.visibility = View.VISIBLE
+        } else {
+            emptyLayout.visibility = View.GONE
+        }
     }
 
     fun showErrorDialog(errorMessage: String?) {

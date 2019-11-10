@@ -11,12 +11,13 @@ import com.desmond.demoapp.R
 import com.desmond.demoapp.model.Album
 import com.squareup.picasso.Picasso
 
-class ListAdapter(ctx: Context, data: List<Album>, listener: ItemClickedListener): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(ctx: Context, data: List<Album>, listener: ItemListener): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     private var dataList : List<Album> = data
     private val inflater: LayoutInflater = LayoutInflater.from(ctx)
-    private val clickedListener: ItemClickedListener = listener
+    private val clickedListener: ItemListener = listener
 
     fun updateData(data: List<Album>) {
+        clickedListener.onEmptyList(data.isEmpty())
         dataList = data
         notifyDataSetChanged()
     }
@@ -51,7 +52,8 @@ class ListAdapter(ctx: Context, data: List<Album>, listener: ItemClickedListener
         var albumName: TextView = itemView.findViewById(R.id.tv_album) as TextView
     }
 
-    interface ItemClickedListener {
+    interface ItemListener {
+        fun onEmptyList(empty: Boolean)
         fun onItemClicked(view: View, album: Album)
     }
 }

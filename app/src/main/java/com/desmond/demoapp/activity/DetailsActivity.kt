@@ -23,7 +23,7 @@ class DetailsActivity : AppCompatActivity() {
         val releaseDate = findViewById<TextView>(R.id.release_date)
 
 
-        Picasso.get().load(album.images?.get(1)?.url).into(coverImage)
+        Picasso.get().load(album.images[0].url).into(coverImage)
         albumName.text = album.name
         artistName.text = Util.getNamesInLine(album.artists)
         val totalTracks = album.total_tracks
@@ -32,6 +32,6 @@ class DetailsActivity : AppCompatActivity() {
         } else {
             songCount.text = getString(R.string.num_songs, totalTracks)
         }
-        releaseDate.text = album.release_date
+        releaseDate.text = getString(R.string.release_date, album.release_date)
     }
 }

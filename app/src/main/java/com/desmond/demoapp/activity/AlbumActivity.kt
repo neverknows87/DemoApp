@@ -2,6 +2,7 @@ package com.desmond.demoapp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.desmond.demoapp.ACCESSTOKEN
 import com.desmond.demoapp.R
 import com.desmond.demoapp.adapter.ListAdapter
 import com.desmond.demoapp.model.Album
@@ -70,7 +72,10 @@ class AlbumActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onRefresh() {
-        presenter?.getAlbumList()
+        if (TextUtils.isEmpty(ACCESSTOKEN))
+            presenter?.getToken()
+        else
+            presenter?.getAlbumList()
     }
 
     override fun showProgress() {

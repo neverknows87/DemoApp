@@ -1,7 +1,6 @@
 package com.desmond.demoapp.presenter
 
-import com.desmond.demoapp.ACCESSTOKEN
-import com.desmond.demoapp.BuildConfig
+import com.desmond.demoapp.*
 import com.desmond.demoapp.model.Album
 import com.desmond.demoapp.webservice.RequestFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,7 +22,7 @@ class AlbumPresenter(private  val view: AlbumView) {
 
     fun getToken() {
         view.showProgress()
-        disposable = authService.authorize(BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET, BuildConfig.GRANT_TYPE)
+        disposable = authService.authorize(CLIENT_ID, CLIENT_SECRET, GRANT_TYPE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -59,6 +58,7 @@ class AlbumPresenter(private  val view: AlbumView) {
                         is SocketTimeoutException -> view.onError("Network Timeout")
                         else -> view.onError(error.message)
                     }
+                    view.hideProgress()
                 }
             )
 
